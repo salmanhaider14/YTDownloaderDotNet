@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YoutubeExplode;
+using YoutubeExplode.Common;
 using YoutubeExplode.Videos.Streams;
 
 namespace YTDownloader.Services;
@@ -18,11 +19,11 @@ public class VideoDownloader : IVideoDownloader
         var streamManifest = await youtube.Videos.Streams.GetManifestAsync(url);
         var muxedStreams = streamManifest.GetMuxedStreams();
        
-        if (muxedStreams != null && muxedStreams.Any())
+        if (muxedStreams is not null && muxedStreams.Any())
         {
             
             var streamInfo = muxedStreams.GetWithHighestVideoQuality();
-            var metaData = new MetaData(video.Title, video.Author.ChannelTitle, video.Duration, streamInfo.Url);
+            var metaData = new MetaData(video.Title, video.Author.ChannelTitle, video.Duration, video.Thumbnails, streamInfo.Url);
             return metaData;
         }
         else
@@ -31,4 +32,4 @@ public class VideoDownloader : IVideoDownloader
         }
     }
 }
-public record MetaData(string title, string author, TimeSpan? duration, string downloadUrl);
+public record MetaData(string title, string author, TimeSpan? duration, IReadOnlyList<Thumbnail> thumbnails, string downloadUrl);

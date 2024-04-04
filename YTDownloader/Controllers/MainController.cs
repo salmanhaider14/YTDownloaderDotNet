@@ -9,9 +9,10 @@ namespace YTDownloader.Controllers;
 [ApiController]
 public class MainController(IVideoDownloader videoDownloader) : ControllerBase
 {
-    private readonly IVideoDownloader _videoDownloader  = videoDownloader;
+    private readonly IVideoDownloader _videoDownloader = videoDownloader;
+
     [HttpPost]
-   public async Task<ActionResult<MetaData>> DownloadVideo(string url)
+    public async Task<ActionResult<MetaData>> DownloadVideo(string url)
     {
         try
         {
